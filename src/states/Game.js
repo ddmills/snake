@@ -60,7 +60,7 @@ export default class Game extends Phaser.State {
 
     this.updateDelay++;
 
-    if (this.updateDelay % (10 - this.speed) == 0) {
+    if (this.updateDelay % (7 - this.speed) == 0) {
       let firstCell = this.snake[this.snake.length - 1];
       let lastCell = this.snake.shift();
 
@@ -118,14 +118,18 @@ export default class Game extends Phaser.State {
   selfCollision(head) {
     for (let i = 0; i < this.snake.length - 1; i++) {
       if (head.x == this.snake[i].x && head.y == this.snake[i].y) {
-        this.game.state.start('GameOver');
+        this.gameOver();
       }
     }
   }
 
   wallCollision(head) {
     if (head.x >= 450 || head.x < 0 || head.y >= 450 || head.y < 0) {
-      this.game.state.start('GameOver');
+      this.gameOver();
     }
+  }
+
+  gameOver() {
+    this.game.state.start('GameOver', true, false, { score: this.score });
   }
 }
