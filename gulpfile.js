@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const gutil = require('gulp-util');
+const deploy = require('gulp-gh-pages');
 const babel = require('babelify');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
@@ -16,6 +17,11 @@ gulp.task('phaser', () => {
 gulp.task('static', ['phaser'], () => {
   return gulp.src('static/**/*')
     .pipe(gulp.dest('build'));
+});
+
+gulp.task('deploy', ['build'], () => {
+  return gulp.src('build/**/*')
+    .pipe(deploy());
 });
 
 gulp.task('babel', () => {

@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "gulp build",
+    "deploy": "gulp deploy",
     "dev": "gulp dev"
   },
   "devDependencies": {
@@ -11,6 +12,7 @@
     "browser-sync": "^2.18.5",
     "browserify": "^13.1.1",
     "gulp": "^3.9.1",
+    "gulp-gh-pages": "^0.5.4",
     "gulp-util": "^3.0.8",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
