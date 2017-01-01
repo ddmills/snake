@@ -32,12 +32,12 @@ export default class Game extends Phaser.State {
 
     this.game.add.text(30, 20, 'SCORE', style);
     this.scoreTextValue = this.game.add.text(90, 20, this.score.toString(), style);
-    this.game.add.text(400, 20, 'SPEED', style);
-    this.speedTextValue = this.game.add.text(458, 20, this.speed.toString(), style);
+    this.game.add.text(350, 20, 'SPEED', style);
+    this.speedTextValue = this.game.add.text(410, 20, this.speed.toString(), style);
   }
 
   generateApple() {
-    const randomX = Math.floor(Math.random() * 40) * this.squareSize;
+    const randomX = Math.floor(Math.random() * 30) * this.squareSize;
     const randomY = Math.floor(Math.random() * 30) * this.squareSize;
     this.apple = this.game.add.sprite(randomX, randomY, 'apple');
     this.apple.width = this.squareSize;
@@ -56,12 +56,11 @@ export default class Game extends Phaser.State {
     }
 
     this.speed = Math.min(10, Math.floor(this.score/5));
-    this.speedTextValue.text = `${this.speed}`;
+    this.speedTextValue.text = this.speed.toString();
 
     this.updateDelay++;
 
     if (this.updateDelay % (10 - this.speed) == 0) {
-      console.log('tick');
       let firstCell = this.snake[this.snake.length - 1];
       let lastCell = this.snake.shift();
 
@@ -89,6 +88,44 @@ export default class Game extends Phaser.State {
 
       this.snake.push(lastCell);
       firstCell = lastCell;
+
+      if (this.addNew) {
+        const newPart = this.game.add.sprite(oldLastCellX, oldLastCellY, 'snake');
+        newPart.height = this.squareSize;
+        newPart.width = this.squareSize;
+        this.snake.unshift(newPart);
+        this.addNew = false;
+      }
+
+      this.appleCollision();
+      this.selfCollision(firstCell);
+      this.wallCollision(firstCell);
+    }
+  }
+
+  appleCollision() {
+    this.snake.forEach(part => {
+      if (part.x == this.apple.x && part.y == this.apple.y) {
+        this.addNew = true;
+        this.apple.destroy();
+        this.generateApple();
+        this.score++;
+        this.scoreTextValue.text = this.score.toString();
+      }
+    });
+  }
+
+  selfCollision(head) {
+    for (let i = 0; i < this.snake.length - 1; i++) {
+      if (head.x == this.snake[i].x && head.y == this.snake[i].y) {
+        this.game.state.start('GameOver');
+      }
+    }
+  }
+
+  wallCollision(head) {
+    if (head.x >= 450 || head.x < 0 || head.y >= 450 || head.y < 0) {
+      this.game.state.start('GameOver');
     }
   }
 }
