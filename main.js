@@ -27,7 +27,7 @@ var Main = function (_Phaser$Game) {
   function Main() {
     _classCallCheck(this, Main);
 
-    var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, 450, 450, Phaser.AUTO, '', null));
+    var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, 512, 512, Phaser.AUTO, '', null));
 
     _this.state.add('Menu', _Menu2.default);
     _this.state.add('Game', _Game2.default);
@@ -69,15 +69,15 @@ var Game = function (_Phaser$State) {
   _createClass(Game, [{
     key: 'preload',
     value: function preload() {
-      this.game.load.image('snake', './img/snake.jpg');
-      this.game.load.image('apple', './img/apple.jpg');
+      this.game.load.image('snake', './img/snake.png');
+      this.game.load.image('apple', './img/apple.png');
     }
   }, {
     key: 'create',
     value: function create() {
       this.snake = [];
       this.apple = {};
-      this.squareSize = 15;
+      this.squareSize = 16;
       this.score = 0;
       this.speed = 0;
       this.updateDelay = 0;
@@ -88,8 +88,9 @@ var Game = function (_Phaser$State) {
       this.game.stage.backgroundColor = '#061f27';
 
       for (var i = 0; i < 10; i++) {
-        var sprite = this.game.add.sprite(150 + i * this.squareSize, 150, 'snake');
+        var sprite = this.game.add.sprite(i * this.squareSize, 128, 'snake');
 
+        sprite.smoothed = false;
         sprite.width = this.squareSize;
         sprite.height = this.squareSize;
 
@@ -108,11 +109,12 @@ var Game = function (_Phaser$State) {
   }, {
     key: 'generateApple',
     value: function generateApple() {
-      var randomX = Math.floor(Math.random() * 30) * this.squareSize;
-      var randomY = Math.floor(Math.random() * 30) * this.squareSize;
+      var randomX = Math.floor(Math.random() * 32) * this.squareSize;
+      var randomY = Math.floor(Math.random() * 32) * this.squareSize;
       this.apple = this.game.add.sprite(randomX, randomY, 'apple');
       this.apple.width = this.squareSize;
       this.apple.height = this.squareSize;
+      this.apple.smoothed = false;
     }
   }, {
     key: 'update',
@@ -201,7 +203,7 @@ var Game = function (_Phaser$State) {
   }, {
     key: 'wallCollision',
     value: function wallCollision(head) {
-      if (head.x >= 450 || head.x < 0 || head.y >= 450 || head.y < 0) {
+      if (head.x >= 512 || head.x < 0 || head.y >= 512 || head.y < 0) {
         this.gameOver();
       }
     }
@@ -249,12 +251,16 @@ var GameOver = function (_Phaser$State) {
   }, {
     key: 'preload',
     value: function preload() {
-      this.game.load.image('gameover', './img/gameover.jpg');
+      this.game.load.image('gameover', './img/gameover.png');
     }
   }, {
     key: 'create',
     value: function create() {
-      this.add.button(0, 0, 'gameover', this.startGame, this);
+      var btn = this.add.button(0, 0, 'gameover', this.startGame, this);
+      btn.height = 512;
+      btn.width = 512;
+      btn.smoothed = false;
+
       var style = {
         font: 'bold 14px sans-serif',
         fill: '#fff',
@@ -262,8 +268,8 @@ var GameOver = function (_Phaser$State) {
         boundsAlignV: 'middle'
       };
 
-      this.game.add.text(0, 20, 'SCORE', style).setTextBounds(0, 60, 450, 100);
-      this.game.add.text(0, 40, this.score.toString(), style).setTextBounds(0, 60, 450, 100);
+      this.game.add.text(0, 20, 'GAME OVER', style).setTextBounds(0, 380, 512, 0);
+      this.game.add.text(0, 40, this.score.toString(), style).setTextBounds(0, 390, 512, 0);
     }
   }, {
     key: 'startGame',
@@ -304,13 +310,26 @@ var Menu = function (_Phaser$State) {
   _createClass(Menu, [{
     key: 'preload',
     value: function preload() {
-      this.game.load.image('splash', './img/splash.jpg');
+      this.game.load.image('splash', './img/splash.png');
     }
   }, {
     key: 'create',
     value: function create() {
-      this.add.sprite(0, 0, 'splash');
-      this.add.button(0, 0, 'splash', this.startGame, this);
+      var btn = this.add.button(0, 0, 'splash', this.startGame, this);
+      btn.height = 512;
+      btn.width = 512;
+      btn.smoothed = false;
+
+      var style = {
+        font: 'bold 16px sans-serif',
+        fill: 'rgb(255, 255, 255)',
+        boundsAlignH: 'center',
+        boundsAlignV: 'middle'
+      };
+
+      var text = this.game.add.text(0, 0, 'CLICK TO START', style);
+      text.setTextBounds(0, 256, 512, 0);
+      text.smoothed = false;
     }
   }, {
     key: 'startGame',
