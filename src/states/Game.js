@@ -1,13 +1,13 @@
 export default class Game extends Phaser.State {
   preload() {
-    this.game.load.image('snake', './img/snake.jpg');
-    this.game.load.image('apple', './img/apple.jpg');
+    this.game.load.image('snake', './img/snake.png');
+    this.game.load.image('apple', './img/apple.png');
   }
 
   create() {
     this.snake = [];
     this.apple = {};
-    this.squareSize = 15;
+    this.squareSize = 16;
     this.score = 0;
     this.speed = 0;
     this.updateDelay = 0;
@@ -18,8 +18,9 @@ export default class Game extends Phaser.State {
     this.game.stage.backgroundColor = '#061f27';
 
     for (let i = 0; i < 10; i++) {
-      const sprite = this.game.add.sprite(150 + i * this.squareSize, 150, 'snake');
+      const sprite = this.game.add.sprite(i * this.squareSize, 128, 'snake');
 
+      sprite.smoothed = false;
       sprite.width = this.squareSize;
       sprite.height = this.squareSize;
 
@@ -37,11 +38,12 @@ export default class Game extends Phaser.State {
   }
 
   generateApple() {
-    const randomX = Math.floor(Math.random() * 30) * this.squareSize;
-    const randomY = Math.floor(Math.random() * 30) * this.squareSize;
+    const randomX = Math.floor(Math.random() * 32) * this.squareSize;
+    const randomY = Math.floor(Math.random() * 32) * this.squareSize;
     this.apple = this.game.add.sprite(randomX, randomY, 'apple');
     this.apple.width = this.squareSize;
     this.apple.height = this.squareSize;
+    this.apple.smoothed = false;
   }
 
   update() {
@@ -124,7 +126,7 @@ export default class Game extends Phaser.State {
   }
 
   wallCollision(head) {
-    if (head.x >= 450 || head.x < 0 || head.y >= 450 || head.y < 0) {
+    if (head.x >= 512 || head.x < 0 || head.y >= 512 || head.y < 0) {
       this.gameOver();
     }
   }

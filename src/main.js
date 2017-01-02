@@ -4,7 +4,7 @@ import GameOver from './states/GameOver';
 
 class Main extends Phaser.Game {
   constructor() {
-    super(450, 450, Phaser.AUTO, '', null);
+    super(512, 512, Phaser.AUTO, '', null);
 
     this.state.add('Menu', Menu);
     this.state.add('Game', Game);
